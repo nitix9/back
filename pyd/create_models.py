@@ -11,4 +11,4 @@ class CreateFilm(BaseModel):
     length:int = Field(example=120)
     rating:int = Field(example=10)
     description:str = Field(example="Фильм о тюремной жизни")
-    poster:str = Field(example="https://example.com/poster.jpg")
+    genres:list[int] = Field(example=[1, 2],min_length=1)

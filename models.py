@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime,DECIMAL
 from sqlalchemy.orm import relationship
 from datetime import datetime
 film_genre = Table(
@@ -16,9 +16,9 @@ class Film(Base):
     title = Column(String(255), nullable=False)
     release_year = Column(Integer, nullable=False)
     length = Column(Integer, nullable=False)
-    rating = Column(Integer, nullable=False)
+    rating = Column(DECIMAL, nullable=False)
     description = Column(String(255), nullable=True)
-    poster=Column(String(255), nullable=False)
+    poster=Column(String(255), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     genres = relationship("Genre", secondary="film_genre", back_populates="films")
 

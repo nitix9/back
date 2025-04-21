@@ -13,5 +13,5 @@ class BaseFilm(BaseModel):
     length:int = Field(example=120)
     rating:int = Field(example=10)
     description:str = Field(example="Фильм о тюремной жизни")
-    poster:str = Field(example="https://example.com/poster.jpg")
+    poster:str|None = Field(example="https://example.com/poster.jpg")
     created_at:datetime = Field(example="2023-01-01T00:00:00Z")
