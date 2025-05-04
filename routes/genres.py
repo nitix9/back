@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import models as m
 from typing import List
 import pyd
+from auth import basic_auth
 
 genre_router=APIRouter(prefix="/genres", tags=["genres"])
 
@@ -13,7 +14,7 @@ def get_all_genre(db:Session=Depends(get_db)):
     return genres
 
 @genre_router.post("/", response_model=pyd.CreateGenre)
-def create_genre(genre:pyd.CreateGenre, db:Session=Depends(get_db)):
+def create_genre(genre:pyd.CreateGenre, db:Session=Depends(get_db),user=Depends(basic_auth)):
     genre_db=db.query(m.Genre).filter(m.Genre.name==genre.name).first()
     if genre_db:
         raise HTTPException(status_code=400, detail="Жанр с таким именем уже существует")

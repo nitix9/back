@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: my-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+
+  backend:
+    build: .
+    container_name: my-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: mydatabase
+  seed:
+    build: .
+    depends_on:
+      - mysql
+    command: ["python", "seed.py"]
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: mydatabase

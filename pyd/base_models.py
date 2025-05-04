@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime
 class BaseGenre(BaseModel):
     id:int = Field(example=1)
@@ -15,3 +15,8 @@ class BaseFilm(BaseModel):
     description:str = Field(example="Фильм о тюремной жизни")
     poster:str|None = Field(example="https://example.com/poster.jpg")
     created_at:datetime = Field(example="2023-01-01T00:00:00Z")
+
+class BaseUser(BaseModel):
+    id: int = Field(example=1)
+    username: str = Field(example='DenchikPro')
+    email: EmailStr | None = Field(None)

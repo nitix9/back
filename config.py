@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = "default"
     DB_HOST: str = "localhost"
     DB_PORT: int = 3306
+    MYSQL_ROOT_PASSWORD: str = "root"
     ALLOWED_CONTENT_TYPES: List[str]=['image/jpeg','image/png','image/webp']
     ALLOWED_EXTENSIONS: List[str]=['jpg']
     MAX_FILE_SIZE:int=2097152

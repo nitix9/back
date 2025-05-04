@@ -9,6 +9,7 @@ import uuid
 from PIL import Image
 from config import settings
 import io
+from auth import basic_auth
 
 film_router=APIRouter(prefix="/movies", tags=["movies"])
 
@@ -25,7 +26,7 @@ def get_one_movie(movie_id:int, db:Session=Depends(get_db)):
     return movie
 
 @film_router.post("/", response_model=pyd.BaseFilm)
-def create_film(film:pyd.CreateFilm, db:Session=Depends(get_db)):
+def create_film(film:pyd.CreateFilm, db:Session=Depends(get_db),user=Depends(basic_auth)):
     film_db=db.query(m.Film).filter(m.Film.title==film.title).first()
     if film_db:
         raise HTTPException(status_code=400, detail="Фильм с таким именем уже существует")
@@ -46,7 +47,7 @@ def create_film(film:pyd.CreateFilm, db:Session=Depends(get_db)):
     return film_db
 
 @film_router.put("/image/{movie_id}", response_model=pyd.SchemaFilm)
-def upload_image(movie_id:int, image:UploadFile, db:Session=Depends(get_db)):
+def upload_image(movie_id:int, image:UploadFile, db:Session=Depends(get_db),user=Depends(basic_auth)):
     film_db=(
         db.query(m.Film).filter(m.Film.id==movie_id).first()
     )
@@ -114,7 +115,7 @@ def upload_image(movie_id:int, image:UploadFile, db:Session=Depends(get_db)):
     return film_db
 
 @film_router.put("/{id}", response_model=pyd.SchemaFilm)
-def update_film(movie_id:int, film:pyd.CreateFilm, db:Session=Depends(get_db)):
+def update_film(movie_id:int, film:pyd.CreateFilm, db:Session=Depends(get_db),user=Depends(basic_auth)):
     movie = db.query(m.Film).filter(m.Film.id==movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Фильм не найден")
@@ -139,7 +140,7 @@ def update_film(movie_id:int, film:pyd.CreateFilm, db:Session=Depends(get_db)):
     return movie
 
 @film_router.delete("/{id}")
-def delete_film(movie_id:int, db:Session=Depends(get_db)):
+def delete_film(movie_id:int, db:Session=Depends(get_db),user=Depends(basic_auth)):
     movie = db.query(m.Film).filter(m.Film.id==movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Фильм не найден")

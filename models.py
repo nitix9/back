@@ -2,12 +2,24 @@ from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime,DECIMAL
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.sql import func
+
 film_genre = Table(
     "film_genre",
     Base.metadata,
     Column("film_id", ForeignKey("films.id"), primary_key=True),
     Column("genre_id", ForeignKey("genres.id"), primary_key=True)
 )
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True,nullable=False)
+    username = Column(String(60), unique=True,nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, nullable=True)
+    created_at = Column(DateTime(), server_default=func.now())
+
 
 class Film(Base):
     __tablename__ = "films"
