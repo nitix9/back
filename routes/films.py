@@ -110,6 +110,9 @@ def upload_image(movie_id:int, image:UploadFile, db:Session=Depends(get_db),user
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Ошибка при обработке изображения: {e}")
+    else:
+        with open(file_path, "wb") as f:
+                f.write(contents)
     film_db.poster= file_path
     db.commit()
     return film_db
