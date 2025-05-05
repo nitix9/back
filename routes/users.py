@@ -4,15 +4,16 @@ from sqlalchemy.orm import Session
 import models as m
 from typing import List
 import pyd
+from auth import basic_auth
 
 user_router=APIRouter(prefix="/users", tags=["users"])
 
 @user_router.get("/", response_model=List[pyd.BaseUser])
-def get_all_users(db:Session=Depends(get_db)):
+def get_all_users(db:Session=Depends(get_db),user=Depends(basic_auth)):
     users= db.query(m.User).all()
     return users
 
-@user_router.post("/user", response_model=pyd.BaseUser)
+@user_router.post("/", response_model=pyd.BaseUser)
 def user_reg(create_user: pyd.CreateUser, db:Session=Depends(get_db)):
     user_db=db.query(m.User).filter(m.User.username==create_user.username).first()
     if user_db:
